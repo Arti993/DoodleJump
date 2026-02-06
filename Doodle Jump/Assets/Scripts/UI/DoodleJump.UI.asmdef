@@ -1,0 +1,1 @@
+{"name":"DoodleJump.UI","rootNamespace":"DoodleJump.UI","references":["DoodleJump.Utils","DoodleJump.Core","DoodleJump.Data","Zenject","Unity.TextMeshPro"],"includePlatforms":[],"excludePlatforms":[],"allowUnsafeCode":false,"overrideReferences":false,"precompiledReferences":[],"autoReferenced":true,"defineConstraints":[],"versionDefines":[],"noEngineReferences":false}

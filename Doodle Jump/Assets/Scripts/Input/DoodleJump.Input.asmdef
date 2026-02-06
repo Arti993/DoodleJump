@@ -1,0 +1,1 @@
+{"name":"DoodleJump.Input","rootNamespace":"DoodleJump.Input","references":["DoodleJump.Utils","DoodleJump.Core","Zenject"],"includePlatforms":[],"excludePlatforms":[],"allowUnsafeCode":false,"overrideReferences":false,"precompiledReferences":[],"autoReferenced":true,"defineConstraints":[],"versionDefines":[],"noEngineReferences":false}
