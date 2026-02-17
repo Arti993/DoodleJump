@@ -1,7 +1,6 @@
 using UnityEngine;
 using Zenject;
 using DoodleJump.Platforms.Spawner;
-using DoodleJump.Platforms.View;
 
 namespace DoodleJump.Platforms.Installers
 {
@@ -12,7 +11,7 @@ namespace DoodleJump.Platforms.Installers
 
         public override void InstallBindings()
         {
-            Container.BindFactory<PlatformView, PlatformViewFactory>()
+            Container.BindFactory<PlatformBehaviour, PlatformViewFactory>()
                 .FromComponentInNewPrefab(_platformPrefab)
                 .UnderTransformGroup("Platforms");
 

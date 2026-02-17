@@ -1,16 +1,12 @@
-using UnityEngine;
-
 namespace DoodleJump.Core.Signals
 {
     public class PlatformLandedSignal
     {
-        public Vector3 PlatformPosition { get; }
-        public float BounceForce { get; }
+        public int PlatformInstanceID { get; }
 
-        public PlatformLandedSignal(Vector3 platformPosition, float bounceForce)
+        public PlatformLandedSignal(int platformInstanceID)
         {
-            PlatformPosition = platformPosition;
-            BounceForce = bounceForce;
+            PlatformInstanceID = platformInstanceID;
         }
     }
 }

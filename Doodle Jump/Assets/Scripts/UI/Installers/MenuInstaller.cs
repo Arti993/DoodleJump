@@ -1,5 +1,8 @@
 using UnityEngine;
 using Zenject;
+using DoodleJump.UI.Core;
+using DoodleJump.UI.Menu.Binder;
+using DoodleJump.UI.Menu.Model;
 using DoodleJump.UI.Menu.View;
 using DoodleJump.UI.Menu.ViewModel;
 
@@ -12,12 +15,20 @@ namespace DoodleJump.UI.Installers
 
         public override void InstallBindings()
         {
+            Container.BindInterfacesAndSelfTo<MenuModel>().AsSingle();
             Container.BindInterfacesAndSelfTo<MenuViewModel>().AsSingle();
 
             if (_menuView != null)
+            {
                 Container.Bind<MenuView>().FromInstance(_menuView).AsSingle();
+            }
             else
+            {
                 Container.Bind<MenuView>().FromComponentInHierarchy().AsSingle();
+            }
+
+            Container.Bind<IBinder>().To<MenuBinder>().AsSingle();
+            Container.BindInterfacesAndSelfTo<UiBinderInitializer>().AsSingle().NonLazy();
         }
     }
 }

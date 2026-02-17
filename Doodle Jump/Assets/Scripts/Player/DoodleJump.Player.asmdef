@@ -1,1 +1,21 @@
-{"name":"DoodleJump.Player","rootNamespace":"DoodleJump.Player","references":["DoodleJump.Utils","DoodleJump.Core","DoodleJump.Input","DoodleJump.Data","Zenject"],"includePlatforms":[],"excludePlatforms":[],"allowUnsafeCode":false,"overrideReferences":false,"precompiledReferences":[],"autoReferenced":true,"defineConstraints":[],"versionDefines":[],"noEngineReferences":false}
+{
+    "name": "DoodleJump.Player",
+    "rootNamespace": "DoodleJump.Player",
+    "references": [
+        "DoodleJump.Utils",
+        "DoodleJump.Core",
+        "DoodleJump.Input",
+        "DoodleJump.Data",
+        "Zenject",
+        "DoodleJump.Platforms"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

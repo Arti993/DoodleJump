@@ -1,3 +1,4 @@
+using DoodleJump.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -11,17 +12,17 @@ namespace DoodleJump.Core.Services
 
         public void LoadMenu()
         {
-            SceneManager.LoadScene(DoodleJump.Utils.Constants.Scenes.Menu);
+            SceneManager.LoadScene(SceneNames.MenuScene.ToString());
         }
 
         public void LoadGameplay()
         {
-            SceneManager.LoadScene(DoodleJump.Utils.Constants.Scenes.Gameplay);
+            SceneManager.LoadScene(SceneNames.GameplayScene.ToString());
         }
 
         public void ReloadGameplay()
         {
-            SceneManager.LoadScene(DoodleJump.Utils.Constants.Scenes.Gameplay);
+            SceneManager.LoadScene(SceneNames.GameplayScene.ToString());
         }
 
         public void Quit()

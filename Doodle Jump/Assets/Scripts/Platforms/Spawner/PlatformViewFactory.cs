@@ -1,9 +1,8 @@
 using Zenject;
-using DoodleJump.Platforms.View;
 
 namespace DoodleJump.Platforms.Spawner
 {
-    public class PlatformViewFactory : PlaceholderFactory<PlatformView>
+    public class PlatformViewFactory : PlaceholderFactory<PlatformBehaviour>
     {
     }
 }

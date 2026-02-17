@@ -1,26 +1,27 @@
 using Zenject;
-using DoodleJump.Core.Services;
+using DoodleJump.UI.Core;
+using DoodleJump.UI.Menu.Model;
 
 namespace DoodleJump.UI.Menu.ViewModel
 {
-    public class MenuViewModel
+    public class MenuViewModel : IViewModel
     {
-        private readonly ISceneLoadingService _sceneLoadingService;
+        private readonly MenuModel _model;
 
         [Inject]
-        public MenuViewModel(ISceneLoadingService sceneLoadingService)
+        public MenuViewModel(MenuModel model)
         {
-            _sceneLoadingService = sceneLoadingService;
+            _model = model;
         }
 
         public void OnPlayClicked()
         {
-            _sceneLoadingService.LoadGameplay();
+            _model.Play();
         }
 
         public void OnExitClicked()
         {
-            _sceneLoadingService.Quit();
+            _model.Exit();
         }
     }
 }

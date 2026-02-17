@@ -19,7 +19,8 @@ namespace DoodleJump.Core.Installers
 
             DeclareSignals();
 
-            Container.BindInterfacesAndSelfTo<SceneLoadingService>().AsSingle();
+            Container.BindInterfacesTo<SceneLoadingService>().AsSingle();
+            Container.BindInterfacesTo<ScoreService>().AsSingle();
         }
 
         private void DeclareSignals()

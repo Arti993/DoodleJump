@@ -1,1 +1,18 @@
-{"name":"DoodleJump.Core","rootNamespace":"DoodleJump.Core","references":["DoodleJump.Utils","DoodleJump.Data","Zenject"],"includePlatforms":[],"excludePlatforms":[],"allowUnsafeCode":false,"overrideReferences":false,"precompiledReferences":[],"autoReferenced":true,"defineConstraints":[],"versionDefines":[],"noEngineReferences":false}
+{
+    "name": "DoodleJump.Core",
+    "rootNamespace": "DoodleJump.Core",
+    "references": [
+        "DoodleJump.Utils",
+        "DoodleJump.Data",
+        "Zenject"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

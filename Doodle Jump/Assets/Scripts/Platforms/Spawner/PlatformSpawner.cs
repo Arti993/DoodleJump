@@ -3,13 +3,11 @@ using Zenject;
 using DoodleJump.Core;
 using DoodleJump.Core.Services;
 using DoodleJump.Data;
-using DoodleJump.Platforms.View;
 
 namespace DoodleJump.Platforms.Spawner
 {
     public class PlatformSpawner : IInitializable, ITickable
     {
-        private const float SpawnHeightOffset = 2f;
         private const float SpawnAheadDistance = 15f;
         private const float SpawnHorizontalHalfRange = 2.5f;
 
@@ -33,8 +31,10 @@ namespace DoodleJump.Platforms.Spawner
 
         public void Initialize()
         {
-            _nextSpawnHeight = 0f;
-            _highestPlatformHeight = 0f;
+            float spawnHeight = _gameConfig.PlayerSpawnHeight;
+            int rowsBelow = Mathf.Clamp(_gameConfig.InitialPlatformRowsBelowSpawn, 0, _gameConfig.InitialPlatformCount - 1);
+            _nextSpawnHeight = spawnHeight - rowsBelow * _gameConfig.PlatformSpawnInterval;
+            _highestPlatformHeight = spawnHeight;
             SpawnInitialPlatforms();
         }
 
@@ -50,7 +50,7 @@ namespace DoodleJump.Platforms.Spawner
             while (_nextSpawnHeight < _highestPlatformHeight + SpawnAheadDistance)
             {
                 SpawnPlatform(_nextSpawnHeight);
-                _nextSpawnHeight += SpawnHeightOffset;
+                _nextSpawnHeight += _gameConfig.PlatformSpawnInterval;
             }
         }
 
@@ -59,7 +59,7 @@ namespace DoodleJump.Platforms.Spawner
             for (int i = 0; i < _gameConfig.InitialPlatformCount; i++)
             {
                 SpawnPlatform(_nextSpawnHeight);
-                _nextSpawnHeight += SpawnHeightOffset;
+                _nextSpawnHeight += _gameConfig.PlatformSpawnInterval;
             }
         }
 
@@ -67,8 +67,9 @@ namespace DoodleJump.Platforms.Spawner
         {
             float x = Random.Range(-SpawnHorizontalHalfRange, SpawnHorizontalHalfRange);
             Vector3 position = new Vector3(x, height, 0f);
-            PlatformView platform = _platformFactory.Create();
+            PlatformBehaviour platform = _platformFactory.Create();
             platform.transform.position = position;
+            platform.SetSize(_gameConfig.PlatformWidth, _gameConfig.PlatformHeight);
         }
 
         private float GetHighestReachedHeight()

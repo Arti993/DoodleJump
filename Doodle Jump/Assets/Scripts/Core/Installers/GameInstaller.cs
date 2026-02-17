@@ -8,8 +8,8 @@ namespace DoodleJump.Core.Installers
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<GameStateService>().AsSingle();
-            Container.BindInterfacesTo<GameBootstrap>().AsSingle();
+            Container.BindInterfacesTo<GameStateService>().AsSingle();
+            Container.BindInterfacesTo<GameplayBootstrap>().AsSingle();
         }
     }
 }

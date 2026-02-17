@@ -23,8 +23,7 @@ namespace DoodleJump.Input.Services
         public void Tick()
         {
             float direction = GetHorizontalDirection();
-            if (Mathf.Abs(direction) > 0.01f)
-                _signalBus.Fire(new InputDirectionSignal(direction));
+            _signalBus.Fire(new InputDirectionSignal(direction));
         }
     }
 }

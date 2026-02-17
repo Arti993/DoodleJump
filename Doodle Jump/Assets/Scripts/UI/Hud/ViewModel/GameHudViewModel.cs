@@ -1,65 +1,44 @@
 using System;
 using Zenject;
-using DoodleJump.Core.Services;
-using DoodleJump.Core.Signals;
+using DoodleJump.UI.Core;
+using DoodleJump.UI.Hud.Model;
 
 namespace DoodleJump.UI.Hud.ViewModel
 {
-    public class GameHudViewModel : IInitializable, IDisposable
+    public class GameHudViewModel : IViewModel
     {
-        private readonly SignalBus _signalBus;
-        private readonly ISceneLoadingService _sceneLoadingService;
-        private int _score;
-
-        public int Score => _score;
-
-        public event Action<int> ScoreChanged;
-        public event Action GameOver;
+        private readonly GameHudModel _model;
 
         [Inject]
-        public GameHudViewModel(SignalBus signalBus, ISceneLoadingService sceneLoadingService)
+        public GameHudViewModel(GameHudModel model)
         {
-            _signalBus = signalBus;
-            _sceneLoadingService = sceneLoadingService;
+            _model = model;
         }
 
-        public void Initialize()
+        public int Score => _model.Score;
+        public int Record => _model.Record;
+        public bool IsGameOver => _model.IsGameOver;
+
+        public event Action<int> ScoreChanged
         {
-            _signalBus.Subscribe<ScoreChangedSignal>(OnScoreChanged);
-            _signalBus.Subscribe<GameOverSignal>(OnGameOver);
+            add => _model.ScoreChanged += value;
+            remove => _model.ScoreChanged -= value;
         }
 
-        public void Dispose()
+        public event Action<int, int> GameOver
         {
-            _signalBus.TryUnsubscribe<ScoreChangedSignal>(OnScoreChanged);
-            _signalBus.TryUnsubscribe<GameOverSignal>(OnGameOver);
-        }
-
-        public void Reset()
-        {
-            _score = 0;
-            ScoreChanged?.Invoke(_score);
-        }
-
-        private void OnScoreChanged(ScoreChangedSignal signal)
-        {
-            _score = signal.Score;
-            ScoreChanged?.Invoke(_score);
-        }
-
-        private void OnGameOver()
-        {
-            GameOver?.Invoke();
+            add => _model.GameOver += value;
+            remove => _model.GameOver -= value;
         }
 
         public void OnRestartClicked()
         {
-            _sceneLoadingService.ReloadGameplay();
+            _model.Restart();
         }
 
         public void OnExitToMenuClicked()
         {
-            _sceneLoadingService.LoadMenu();
+            _model.ExitToMenu();
         }
     }
 }
