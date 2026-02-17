@@ -1,8 +1,9 @@
+using System;
 using Zenject;
 
 namespace DoodleJump.UI.Core
 {
-    public class UiBinderInitializer : IInitializable
+    public class UiBinderInitializer : IInitializable, IDisposable
     {
         private readonly IBinder _binder;
 
@@ -15,6 +16,11 @@ namespace DoodleJump.UI.Core
         public void Initialize()
         {
             _binder.Bind();
+        }
+
+        public void Dispose()
+        {
+            _binder.Unbind();
         }
     }
 }
