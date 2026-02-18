@@ -1,8 +1,8 @@
-using UnityEngine;
-using Zenject;
 using DoodleJump.Core.Signals;
 using DoodleJump.Data;
 using DoodleJump.Platforms;
+using UnityEngine;
+using Zenject;
 
 namespace DoodleJump.Player
 {
@@ -10,33 +10,27 @@ namespace DoodleJump.Player
     [RequireComponent(typeof(Collider2D))]
     public class PlayerBehaviour : MonoBehaviour
     {
-        private Rigidbody2D _rigidbody;
+        private PlayerBounceHandler _bounceHandler;
         private Collider2D _collider;
+        private PlayerConfig _config;
+        private PlayerDeathChecker _deathChecker;
+        private PlayerScoreHandler _scoreHandler;
         private SignalBus _signalBus;
-        private PlayerConfig _playerConfig;
-        private PlayerDeathChecker _playerDeathChecker;
 
-        [Inject]
-        private void Construct(SignalBus signalBus, PlayerConfig playerConfig, PlayerDeathChecker playerDeathChecker)
-        {
-            _signalBus = signalBus;
-            _playerConfig = playerConfig;
-            _playerDeathChecker = playerDeathChecker;
-        }
-        
-        public Rigidbody2D Rigidbody => _rigidbody;
-        public Vector2 Velocity => _rigidbody.velocity;
+        public Rigidbody2D Rigidbody { get; private set; }
+
+        public Vector2 Velocity => Rigidbody.velocity;
 
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody2D>();
+            Rigidbody = GetComponent<Rigidbody2D>();
             _collider = GetComponent<Collider2D>();
         }
 
         private void OnEnable()
         {
-            _rigidbody.gravityScale = _playerConfig.GravityScale;
-            
+            Rigidbody.gravityScale = _config.GravityScale;
+
             _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
         }
 
@@ -49,24 +43,44 @@ namespace DoodleJump.Player
         {
             if (_collider.enabled == false)
                 return;
-            
-            if(_playerDeathChecker.IsPlayerAlive == false)
+
+            if (_deathChecker.IsPlayerAlive == false)
                 return;
 
-            if (collision.gameObject.TryGetComponent(out PlatformBehaviour _))
-                _signalBus.Fire(new PlatformLandedSignal(collision.gameObject.GetInstanceID()));
+            if (collision.gameObject.TryGetComponent(out PlatformBehaviour platform))
+            {
+                _bounceHandler.ApplyBounce();
+
+                int platformID = platform.gameObject.GetInstanceID();
+
+                _ = _scoreHandler.TryAddScore(platformID);
+            }
         }
-        
+
+        [Inject]
+        private void Construct(SignalBus signalBus,
+            PlayerConfig playerConfig,
+            PlayerBounceHandler bounceHandler,
+            PlayerScoreHandler scoreHandler,
+            PlayerDeathChecker deathChecker)
+        {
+            _signalBus = signalBus;
+            _config = playerConfig;
+            _bounceHandler = bounceHandler;
+            _scoreHandler = scoreHandler;
+            _deathChecker = deathChecker;
+        }
+
         public void SetVelocity(Vector2 velocity)
         {
-            _rigidbody.velocity = velocity;
+            Rigidbody.velocity = velocity;
         }
 
         public void SetColliderEnabled(bool enabled)
         {
             _collider.enabled = enabled;
         }
-        
+
         private void OnGameStarted()
         {
             SetVelocity(Vector2.zero);

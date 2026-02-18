@@ -1,18 +1,18 @@
 using System;
-using UnityEngine;
-using Zenject;
 using DoodleJump.Core;
 using DoodleJump.Core.Services;
 using DoodleJump.Core.Signals;
 using DoodleJump.Data;
+using UnityEngine;
+using Zenject;
 
 namespace DoodleJump.Player
 {
     public class PlayerHorizontalMovement : IInitializable, IFixedTickable, IDisposable
     {
+        private readonly IGameStateService _gameStateService;
         private readonly PlayerBehaviour _playerBehaviour;
         private readonly PlayerConfig _playerConfig;
-        private readonly IGameStateService _gameStateService;
         private readonly PlayerDeathChecker _playerDeathChecker;
         private readonly SignalBus _signalBus;
 
@@ -33,15 +33,8 @@ namespace DoodleJump.Player
             _signalBus = signalBus;
         }
 
-        public void Initialize()
-        {
-            _signalBus.Subscribe<InputDirectionSignal>(OnInputDirection);
-            _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
-        }
-
         public void Dispose()
         {
-            _signalBus.TryUnsubscribe<InputDirectionSignal>(OnInputDirection);
             _signalBus.TryUnsubscribe<GameStartedSignal>(OnGameStarted);
         }
 
@@ -49,18 +42,24 @@ namespace DoodleJump.Player
         {
             if (_gameStateService.CurrentState != GameState.Playing)
                 return;
-            
-            if(_playerDeathChecker.IsPlayerAlive == false)
+
+            if (_playerDeathChecker.IsPlayerAlive == false)
                 return;
 
             Vector2 velocity = _playerBehaviour.Velocity;
             velocity.x = _currentHorizontalDirection * _playerConfig.HorizontalSpeed;
+
             _playerBehaviour.SetVelocity(velocity);
         }
 
-        private void OnInputDirection(InputDirectionSignal signal)
+        public void Initialize()
         {
-            _currentHorizontalDirection = signal.Direction;
+            _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
+        }
+
+        public void SetDirection(float direction)
+        {
+            _currentHorizontalDirection = direction;
         }
 
         private void OnGameStarted()

@@ -8,9 +8,8 @@ namespace DoodleJump.Data
         [SerializeField] private float _horizontalSpeed = 8f;
 
         [SerializeField] private float _gravityScale = 1f;
-        
+
         public float HorizontalSpeed => _horizontalSpeed;
         public float GravityScale => _gravityScale;
-        
     }
 }

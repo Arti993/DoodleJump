@@ -1,13 +1,11 @@
+using DoodleJump.Core.Signals;
 using Zenject;
 
 namespace DoodleJump.Core.Services
 {
     public class GameStateService : IGameStateService
     {
-        private GameState _currentState = GameState.Menu;
         private readonly SignalBus _signalBus;
-
-        public GameState CurrentState => _currentState;
 
         [Inject]
         public GameStateService(SignalBus signalBus)
@@ -15,20 +13,22 @@ namespace DoodleJump.Core.Services
             _signalBus = signalBus;
         }
 
+        public GameState CurrentState { get; private set; } = GameState.Menu;
+
         public void SetState(GameState state)
         {
-            if (_currentState == state)
+            if (CurrentState == state)
                 return;
 
-            _currentState = state;
+            CurrentState = state;
 
             switch (state)
             {
                 case GameState.Playing:
-                    _signalBus.Fire<Signals.GameStartedSignal>();
+                    _signalBus.Fire<GameStartedSignal>();
                     break;
                 case GameState.GameOver:
-                    _signalBus.Fire<Signals.GameOverSignal>();
+                    _signalBus.Fire<GameOverSignal>();
                     break;
             }
         }

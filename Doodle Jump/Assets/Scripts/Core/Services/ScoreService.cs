@@ -7,9 +7,9 @@ namespace DoodleJump.Core.Services
     public class ScoreService : IScoreService
     {
         private const string RecordKey = "HighScore";
-        
-        private int _currentScore;
         private readonly SignalBus _signalBus;
+
+        private int _currentScore;
 
         [Inject]
         public ScoreService(SignalBus signalBus)
@@ -36,21 +36,21 @@ namespace DoodleJump.Core.Services
         public void AddScore()
         {
             _currentScore++;
-            
+
             _signalBus.Fire(new ScoreChangedSignal(_currentScore));
         }
 
         public void ResetScore()
         {
             _currentScore = 0;
-           
+
             _signalBus.Fire(new ScoreChangedSignal(_currentScore));
         }
 
         public bool TryUpdateRecord(int score)
         {
             int currentRecord = GetRecord();
-            
+
             if (score > currentRecord)
             {
                 SaveRecord(score);

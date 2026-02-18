@@ -1,9 +1,13 @@
 {
-  "name": "DoodleJump.Core",
-  "rootNamespace": "DoodleJump.Core",
+  "name": "DoodleJump.Installers",
+  "rootNamespace": "",
   "references": [
-    "DoodleJump.Utils",
+    "DoodleJump.Core",
     "DoodleJump.Data",
+    "DoodleJump.Input",
+    "DoodleJump.Player",
+    "DoodleJump.Platforms",
+    "DoodleJump.UI",
     "Zenject"
   ],
   "includePlatforms": [],

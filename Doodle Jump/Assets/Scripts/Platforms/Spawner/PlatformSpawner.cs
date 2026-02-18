@@ -1,8 +1,8 @@
-using UnityEngine;
-using Zenject;
 using DoodleJump.Core;
 using DoodleJump.Core.Services;
 using DoodleJump.Data;
+using UnityEngine;
+using Zenject;
 
 namespace DoodleJump.Platforms.Spawner
 {
@@ -10,17 +10,17 @@ namespace DoodleJump.Platforms.Spawner
     {
         private const float SpawnAheadDistance = 15f;
         private const float SpawnHorizontalHalfRange = 2.5f;
-
-        private readonly PlatformViewFactory _platformFactory;
         private readonly GameConfig _gameConfig;
         private readonly IGameStateService _gameStateService;
 
-        private float _nextSpawnHeight;
+        private readonly PlatformsFactory _platformFactory;
         private float _highestPlatformHeight;
+
+        private float _nextSpawnHeight;
 
         [Inject]
         public PlatformSpawner(
-            PlatformViewFactory platformFactory,
+            PlatformsFactory platformFactory,
             GameConfig gameConfig,
             IGameStateService gameStateService)
         {
@@ -32,7 +32,8 @@ namespace DoodleJump.Platforms.Spawner
         public void Initialize()
         {
             float spawnHeight = _gameConfig.PlayerSpawnHeight;
-            int rowsBelow = Mathf.Clamp(_gameConfig.InitialPlatformRowsBelowSpawn, 0, _gameConfig.InitialPlatformCount - 1);
+            float rowsBelow = Mathf.Clamp(_gameConfig.InitialPlatformRowsBelowSpawn, 0,
+                _gameConfig.InitialPlatformCount - 1);
             _nextSpawnHeight = spawnHeight - rowsBelow * _gameConfig.PlatformSpawnInterval;
             _highestPlatformHeight = spawnHeight;
             SpawnInitialPlatforms();
@@ -44,6 +45,7 @@ namespace DoodleJump.Platforms.Spawner
                 return;
 
             float playerHeight = GetHighestReachedHeight();
+            
             if (playerHeight > _highestPlatformHeight)
                 _highestPlatformHeight = playerHeight;
 
@@ -59,16 +61,20 @@ namespace DoodleJump.Platforms.Spawner
             for (int i = 0; i < _gameConfig.InitialPlatformCount; i++)
             {
                 SpawnPlatform(_nextSpawnHeight);
+                
                 _nextSpawnHeight += _gameConfig.PlatformSpawnInterval;
             }
         }
 
         private void SpawnPlatform(float height)
         {
-            float x = Random.Range(-SpawnHorizontalHalfRange, SpawnHorizontalHalfRange);
-            Vector3 position = new Vector3(x, height, 0f);
-            PlatformBehaviour platform = _platformFactory.Create();
+            var x = Random.Range(-SpawnHorizontalHalfRange, SpawnHorizontalHalfRange);
+            var position = new Vector3(x, height, 0f);
+            
+            var platform = _platformFactory.Create();
+            
             platform.transform.position = position;
+            
             platform.SetSize(_gameConfig.PlatformWidth, _gameConfig.PlatformHeight);
         }
 

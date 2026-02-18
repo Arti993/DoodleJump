@@ -1,8 +1,8 @@
-using UnityEngine;
-using Zenject;
 using DoodleJump.Core.Services;
 using DoodleJump.Core.Signals;
 using DoodleJump.Data;
+using UnityEngine;
+using Zenject;
 
 namespace DoodleJump.Core.Installers
 {
@@ -29,8 +29,6 @@ namespace DoodleJump.Core.Installers
             Container.DeclareSignal<PlayerDiedSignal>();
             Container.DeclareSignal<GameStartedSignal>();
             Container.DeclareSignal<GameOverSignal>();
-            Container.DeclareSignal<PlatformLandedSignal>();
-            Container.DeclareSignal<InputDirectionSignal>();
         }
     }
 }

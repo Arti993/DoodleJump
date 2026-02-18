@@ -1,18 +1,18 @@
 using System;
-using UnityEngine;
-using Zenject;
 using DoodleJump.Core;
 using DoodleJump.Core.Services;
 using DoodleJump.Core.Signals;
 using DoodleJump.Data;
+using UnityEngine;
+using Zenject;
 
 namespace DoodleJump.Player
 {
     public class PlayerBounceHandler : IInitializable, IFixedTickable, IDisposable
     {
-        private readonly PlayerBehaviour _playerBehaviour;
         private readonly GameConfig _gameConfig;
         private readonly IGameStateService _gameStateService;
+        private readonly PlayerBehaviour _playerBehaviour;
         private readonly PlayerDeathChecker _playerDeathChecker;
         private readonly SignalBus _signalBus;
 
@@ -34,15 +34,8 @@ namespace DoodleJump.Player
             _signalBus = signalBus;
         }
 
-        public void Initialize()
-        {
-            _signalBus.Subscribe<PlatformLandedSignal>(OnPlatformLanded);
-            _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
-        }
-
         public void Dispose()
         {
-            _signalBus.TryUnsubscribe<PlatformLandedSignal>(OnPlatformLanded);
             _signalBus.TryUnsubscribe<GameStartedSignal>(OnGameStarted);
         }
 
@@ -50,16 +43,16 @@ namespace DoodleJump.Player
         {
             if (_gameStateService.CurrentState != GameState.Playing)
                 return;
-            
-            if(_playerDeathChecker.IsPlayerAlive == false)
+
+            if (_playerDeathChecker.IsPlayerAlive == false)
                 return;
 
             CheckReachedHighestPoint();
         }
 
-        private void OnPlatformLanded(PlatformLandedSignal signal)
+        public void Initialize()
         {
-            ApplyBounce();
+            _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
         }
 
         private void OnGameStarted()
@@ -68,7 +61,7 @@ namespace DoodleJump.Player
             _playerBehaviour.SetColliderEnabled(true);
         }
 
-        private void ApplyBounce()
+        public void ApplyBounce()
         {
             float heightToReach = _gameConfig.PlatformSpawnInterval + _gameConfig.PlatformHeight;
             float gravityScale = _playerBehaviour.Rigidbody.gravityScale;
@@ -77,6 +70,7 @@ namespace DoodleJump.Player
 
             Vector2 velocity = _playerBehaviour.Velocity;
             velocity.y = requiredVelocityY;
+            
             _playerBehaviour.SetVelocity(velocity);
 
             float jumpStartHeight = _playerBehaviour.transform.position.y;

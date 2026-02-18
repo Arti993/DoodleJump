@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using DoodleJump.Core.Services;
-using Zenject;
 using DoodleJump.Core.Signals;
+using Zenject;
 
 namespace DoodleJump.Player
 {
@@ -11,7 +11,7 @@ namespace DoodleJump.Player
         private readonly IScoreService _scoreService;
         private readonly SignalBus _signalBus;
 
-        private readonly List<int> _usedPlatforms = new List<int>();
+        private readonly List<int> _usedPlatforms = new();
 
         [Inject]
         public PlayerScoreHandler(IScoreService scoreService, SignalBus signalBus)
@@ -20,26 +20,26 @@ namespace DoodleJump.Player
             _signalBus = signalBus;
         }
 
-        public void Initialize()
-        {
-            _signalBus.Subscribe<PlatformLandedSignal>(OnPlatformLanded);
-            _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
-        }
-
         public void Dispose()
         {
-            _signalBus.TryUnsubscribe<PlatformLandedSignal>(OnPlatformLanded);
             _signalBus.TryUnsubscribe<GameStartedSignal>(OnGameStarted);
         }
 
-        private void OnPlatformLanded(PlatformLandedSignal signal)
+        public void Initialize()
         {
-            if (_usedPlatforms.Contains(signal.PlatformInstanceID))
-                return;
+            _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
+        }
 
-            _usedPlatforms.Add(signal.PlatformInstanceID);
-            
+        public bool TryAddScore(int platformId)
+        {
+            if (_usedPlatforms.Contains(platformId))
+                return false;
+
+            _usedPlatforms.Add(platformId);
+
             _scoreService.AddScore();
+
+            return true;
         }
 
         private void OnGameStarted()

@@ -1,6 +1,4 @@
-using UnityEngine;
 using Zenject;
-using DoodleJump.Core.Services;
 
 namespace DoodleJump.Core.Bootstrap
 {

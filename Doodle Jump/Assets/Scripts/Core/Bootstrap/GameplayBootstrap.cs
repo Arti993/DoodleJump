@@ -1,7 +1,7 @@
 using System;
-using Zenject;
 using DoodleJump.Core.Services;
 using DoodleJump.Core.Signals;
+using Zenject;
 
 namespace DoodleJump.Core.Bootstrap
 {
@@ -17,15 +17,15 @@ namespace DoodleJump.Core.Bootstrap
             _signalBus = signalBus;
         }
 
+        public void Dispose()
+        {
+            _signalBus.TryUnsubscribe<PlayerDiedSignal>(OnPlayerDied);
+        }
+
         public void Initialize()
         {
             _signalBus.Subscribe<PlayerDiedSignal>(OnPlayerDied);
             _gameStateService.SetState(GameState.Playing);
-        }
-
-        public void Dispose()
-        {
-            _signalBus.TryUnsubscribe<PlayerDiedSignal>(OnPlayerDied);
         }
 
         private void OnPlayerDied()

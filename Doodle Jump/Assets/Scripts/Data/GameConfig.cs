@@ -8,7 +8,7 @@ namespace DoodleJump.Data
         [SerializeField] private float _platformSpawnInterval = 2f;
         [SerializeField] private int _initialPlatformCount = 10;
         [SerializeField] private int _initialPlatformRowsBelowSpawn = 4;
-        [SerializeField] private float _playerSpawnHeight = 0f;
+        [SerializeField] private float _playerSpawnHeight;
         [SerializeField] private float _cameraFollowSpeed = 5f;
         [SerializeField] private float _cameraConstantUpSpeed = 1f;
         [SerializeField] private float _platformHeight = 0.325f;

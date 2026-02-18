@@ -1,21 +1,19 @@
 using System;
-using UnityEngine;
-using Zenject;
 using DoodleJump.Core;
 using DoodleJump.Core.Services;
 using DoodleJump.Core.Signals;
 using DoodleJump.Data;
+using UnityEngine;
+using Zenject;
 
 namespace DoodleJump.Player
 {
     public class PlayerDeathChecker : IInitializable, IDisposable, IFixedTickable
     {
-        private readonly PlayerBehaviour _playerBehaviour;
         private readonly GameConfig _gameConfig;
         private readonly IGameStateService _gameStateService;
+        private readonly PlayerBehaviour _playerBehaviour;
         private readonly SignalBus _signalBus;
-        
-        private bool _isPlayerAlive = true;
         private Transform _cameraTransform;
 
         [Inject]
@@ -31,13 +29,8 @@ namespace DoodleJump.Player
             _gameStateService = gameStateService;
             _cameraTransform = UnityEngine.Camera.main.transform;
         }
-        
-        public bool IsPlayerAlive => _isPlayerAlive;
-        
-        public void Initialize()
-        {
-            _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
-        }
+
+        public bool IsPlayerAlive { get; private set; } = true;
 
         public void Dispose()
         {
@@ -49,33 +42,36 @@ namespace DoodleJump.Player
             if (_gameStateService.CurrentState != GameState.Playing)
                 return;
 
-            if (_isPlayerAlive == false)
+            if (IsPlayerAlive == false)
                 return;
 
             CheckDeathByFall();
+        }
+
+        public void Initialize()
+        {
+            _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
         }
 
         private void CheckDeathByFall()
         {
             if (_playerBehaviour.transform.position.y <
                 _cameraTransform.position.y - _gameConfig.DeathHeightOffset)
-            {
                 Die();
-            }
         }
 
         private void Die()
         {
-            if (_isPlayerAlive == false)
+            if (IsPlayerAlive == false)
                 return;
 
-            _isPlayerAlive = false;
+            IsPlayerAlive = false;
             _signalBus.Fire<PlayerDiedSignal>();
         }
 
         private void OnGameStarted()
         {
-            _isPlayerAlive = true;
+            IsPlayerAlive = true;
         }
     }
 }

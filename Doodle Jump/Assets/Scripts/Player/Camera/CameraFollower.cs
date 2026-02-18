@@ -1,24 +1,15 @@
+using DoodleJump.Data;
 using UnityEngine;
 using Zenject;
-using DoodleJump.Data;
 
 namespace DoodleJump.Player.Camera
 {
     public class CameraFollower : MonoBehaviour
     {
-        private GameConfig _gameConfig;
         private Transform _cachedTransform;
-        private Transform _playerCachedTransform;
+        private GameConfig _gameConfig;
         private float _highestY;
-
-        [Inject]
-        public void Construct(PlayerBehaviour playerBehaviour, GameConfig gameConfig)
-        {
-            _gameConfig = gameConfig;
-            _cachedTransform = transform;
-            _highestY = _cachedTransform.position.y;
-            _playerCachedTransform = playerBehaviour.transform;
-        }
+        private Transform _playerCachedTransform;
 
         private void LateUpdate()
         {
@@ -31,6 +22,15 @@ namespace DoodleJump.Player.Camera
             float followY = Mathf.Lerp(position.y, _highestY, _gameConfig.CameraFollowSpeed * Time.deltaTime);
             position.y = Mathf.Max(minY, followY);
             _cachedTransform.position = position;
+        }
+
+        [Inject]
+        public void Construct(PlayerBehaviour playerBehaviour, GameConfig gameConfig)
+        {
+            _gameConfig = gameConfig;
+            _cachedTransform = transform;
+            _highestY = _cachedTransform.position.y;
+            _playerCachedTransform = playerBehaviour.transform;
         }
     }
 }

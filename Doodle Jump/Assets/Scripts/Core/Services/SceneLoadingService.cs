@@ -1,5 +1,5 @@
+using System;
 using DoodleJump.Data;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -8,7 +8,9 @@ namespace DoodleJump.Core.Services
     public class SceneLoadingService : ISceneLoadingService
     {
         [Inject]
-        public SceneLoadingService() { }
+        public SceneLoadingService()
+        {
+        }
 
         public void LoadMenu()
         {
@@ -28,7 +30,7 @@ namespace DoodleJump.Core.Services
         public void Quit()
         {
 #if UNITY_EDITOR
-            System.Type editorApplication = System.Type.GetType("UnityEditor.EditorApplication, UnityEditor");
+            var editorApplication = Type.GetType("UnityEditor.EditorApplication, UnityEditor");
             editorApplication?.GetProperty("isPlaying")?.SetValue(null, false);
 #else
             Application.Quit();

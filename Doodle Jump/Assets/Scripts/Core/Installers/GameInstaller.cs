@@ -1,6 +1,6 @@
-using Zenject;
 using DoodleJump.Core.Bootstrap;
 using DoodleJump.Core.Services;
+using Zenject;
 
 namespace DoodleJump.Core.Installers
 {

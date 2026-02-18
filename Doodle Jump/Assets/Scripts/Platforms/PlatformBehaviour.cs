@@ -7,7 +7,7 @@ namespace DoodleJump.Platforms
     {
         public void SetSize(float width, float height)
         {
-            Vector3 scale = transform.localScale;
+            var scale = transform.localScale;
             scale.x = width;
             scale.y = height;
             transform.localScale = scale;
